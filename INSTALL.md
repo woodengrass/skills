@@ -1,0 +1,9 @@
+1. **Check your agent's official documentation.** Identify which coding agent is running and, if available, its version. Find out how it loads `SKILL.md` and `AGENTS.md` at both the global and project levels. If it does not load `AGENTS.md` directly, find the supported instruction filename or import method. Do not assume another agent's paths or settings apply.
+2. **Ask the user where to install.** Explain that a global installation applies to all projects opened with this agent, while a project installation applies only to the selected project. Wait for the user to choose before writing files. If the user chooses project installation and you cannot identify the project root, ask them to specify it.
+3. **Fetch only the required files from GitHub.** Use the raw URLs below. Do not clone the repository, download an archive of the whole repository, or ask the user to download the files manually.
+
+   - Working instructions: <https://raw.githubusercontent.com/woodengrass/skill/main/AGENTS.md>
+   - `adr` skill: <https://raw.githubusercontent.com/woodengrass/skill/main/skill/adr/SKILL.md>
+
+4. **Install within the selected scope.** Put the skill where the agent looks for it, preserving the `adr/SKILL.md` structure. Install the working instructions using a method the agent supports. Preserve existing instructions and settings, and ask the user before resolving any conflicts. If there is no supported installation method or you lack write access, report what you could not install. Do not switch to another scope.
+5. **Verify and report.** Confirm that the files and settings are in the correct locations. If the agent provides a way to check that it loaded the instructions or skill, run that check once. Report the installation scope, the actual paths used, and whether the user needs to restart the agent or start a new session.
