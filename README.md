@@ -1,16 +1,18 @@
-# skill
+# OpenCode 個人指引與技能
 
-自寫自用 skills。
+這個倉庫用來維護我自用的 OpenCode 全域指引與技能。
 
-## 目錄
-
-- [reporter](./reporter/)：給它一個題目，選廣度和深度，一次產出全面研究報告。
-  - 依賴：OhMyOpenCode；閱讀器需本機 Python；不需付費服務。
+- [`AGENTS.md`](./AGENTS.md)：全域指引，涵蓋工作範圍、驗證方式與決策紀錄。
+- [`skill/adr/SKILL.md`](./skill/adr/SKILL.md)：`adr` 技能，用 `GOALS.md` 記錄專案目標，並在相關程式碼旁用 `*.adr.md` 記下長期決策。
 
 ## 安裝
 
-把目錄複製到 skills 路徑，重開會話生效：
+從倉庫根目錄執行。若已有全域 `AGENTS.md`，請先合併要保留的內容；直接複製會覆蓋原檔。
 
 ```bash
-cp -r <skill> ~/.agents/skills/
+mkdir -p ~/.config/opencode ~/.agents/skills
+cp AGENTS.md ~/.config/opencode/AGENTS.md
+cp -r skill/adr ~/.agents/skills/
 ```
+
+重新啟動 OpenCode 後生效。
