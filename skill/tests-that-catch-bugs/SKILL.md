@@ -48,11 +48,15 @@ Use the cheapest order that applies:
 
 1. **Write the test before the implementation.** It fails first. Record the failure message.
 2. **Bug fix:** the reproduction from section 3 fails first. Record the failure message.
-3. **Only if the implementation already exists**, break it on purpose:
-   - Change one thing: the line the test claims to guard (flip a condition, remove a call, change a boundary, return early).
-   - Run only that test, not the whole suite.
-   - Revert immediately, then confirm with `git diff` that no change to the implementation is left behind. Never skip this.
-   - Try at most two different breakages. If the test stays green both times, it guards nothing: delete or rewrite it. Do not keep searching for a third breakage.
+3. **Only if the implementation already exists**, break it on purpose (a mutant):
+   - Aim each mutant at a behavior statement: make the code fail the way that statement would really be broken (off-by-one at its boundary, a dropped condition, a skipped call, the wrong branch, swapped arguments). A random edit elsewhere proves nothing.
+   - If the repo already uses a mutation tool (mutmut, cargo-mutants, Stryker, PIT), run it only on the changed code and only against the new test, for example `cargo mutants --in-diff <diff file>`.
+   - If it has none, finish this change with hand mutation below; do not stop to ask. Then, if the project has a test suite that is maintained over time, propose one tool that fits its language in the final approval request, with the exact install command (a dev dependency changes the lockfile; `cargo install` is global). Skip this if a `Source: user` record already declines it.
+     - Approved: install it, rerun it on this change, and add its commands to the project's AGENTS.md.
+     - Declined: write a `Source: user` decision record (`adr` skill) so it is not proposed again.
+   - Hand mutation: copy the file first, change one thing, run only that test, restore the file from the copy, and confirm with `cmp` that it is identical to the copy. Never skip the restore check.
+   - A mutant that cannot change any observable behavior (an equivalent mutant) is not evidence against the test; discard it and pick another.
+   - At most two mutants per statement. If the test stays green on both, it guards nothing: delete or rewrite it. Do not hunt for a third, and do not chase a mutation score for code the test does not claim to guard.
 
 **Value check.** Seeing a test fail proves it is sensitive, not that it is useful. Ask: is the line you broke logic, or a declaration? If the only way to make the test fail is to edit a constant, a default value, a field flag (such as `frozen=True`), a path or a key binding, and the test simply restates that value, it duplicates the declaration: delete it. The only exception is a value that other components depend on as a contract and that nothing else checks; say so in the report.
 
@@ -133,7 +137,7 @@ Do not report test counts, file counts, or "all tests pass". Report this table:
 
 | # | Behavior statement | Guarded by | Proof it fails |
 |---|---|---|---|
-| B1 | ... | new `test_x` / existing `test_y` / extended `test_z` / proposed lint, type or design | written first / reproduced bug / broke `<line>` -> `<failure message>` / not applicable (existing, unchanged) |
+| B1 | ... | new `test_x` / existing `test_y` / extended `test_z` / proposed lint, type or design | written first / reproduced bug / mutant `<what was changed>` -> `<failure message>` / not applicable (existing, unchanged) |
 
 Then list:
 
