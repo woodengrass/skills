@@ -9,17 +9,18 @@ not a bonus.
 1. The user's explicit instructions in this conversation.
 2. The project's AGENTS.md, `GOALS.md`, and `*.adr.md` decision records.
 3. This policy.
-4. Agent and oh-my-opencode defaults.
+4. The agent's and harness's defaults.
 
-`ulw` / `ultrawork` raises effort on the requested work. It does not widen
-scope or waive the approval rules. A subagent's scope is its delegating prompt.
+A request for more effort (for example `ulw` / `ultrawork`) raises effort on
+the requested work. It does not widen scope or waive the approval rules.
+A subagent's scope is its delegating prompt.
 
 ## Match the Process to the Task
 
 - Small task (one or a few files, approach obvious): do it directly. No todo
   list, no plan, no delegation. Edit, verify, report.
-- Larger task: oh-my-opencode defaults apply. Put only steps the request
-  requires on the todo list.
+- Larger task: use the harness's planning and todo features. Put only steps
+  the request requires on the todo list.
 - Do the task the way a competent engineer would do it by hand. Do not build
   tooling to perform a task you can perform directly, and do not add safety
   machinery the user did not ask for.
@@ -67,8 +68,7 @@ finish everything that does not depend on the answer first, then ask once.
 - An unrelated problem gets fixed only if it blocks completing or verifying
   this task. Otherwise mention it in the report.
 - No documentation files unless asked (decision records and project commands,
-  below, excepted). Comments
-  only for a non-obvious "why". Project-local dependencies are fine when
+  below, excepted). Comments only for a non-obvious "why". Project-local dependencies are fine when
   needed; report them. Remove temporary files before finishing.
 
 ## Approval Required
@@ -82,6 +82,16 @@ Prepare everything first, then send one request listing every such action with
 the exact commands. Once approved, carry out the whole list without asking
 again. Everything reversible proceeds without asking.
 
+When an action is blocked or fails, decide what was blocked:
+
+- The goal: the action is on the list above, or a `Source: user` record
+  forbids it. Do not reach the same effect another way (another command, a
+  script, an API call); put it in the approval request.
+- Otherwise, assume the method is wrong, not that the user forbids it. Find
+  the intended way (the project's AGENTS.md, decision records, README,
+  existing scripts) and carry on. A block alone is never evidence of a ban.
+  Once you find the way, add it under Project Commands.
+
 ## Verification
 
 Passing tests is not evidence that a change works. Tests written alongside
@@ -93,12 +103,14 @@ the code share its misunderstandings.
   in the report: captured screen text, command output, or log lines. Use the
   method in the project's AGENTS.md. If the project has no way to run and
   observe the program, say so in the report; do not build one.
-- Then run the project's full existing checks (build, types, lint, tests)
-  once. A check that passed is finished. Do not re-run it or verify the same
-  thing a second way.
-- Never report a result you did not observe. Say so when a check could not run.
+- Before reporting, the final version must have one result from the project's
+  full existing checks (build, types, lint, tests). Run them locally once,
+  using the commands in the project's AGENTS.md. A check that passed is
+  finished. Do not re-run it or verify the same thing a second way.
+- Never report a result you did not observe, or one observed before a later
+  edit. Say so when a check could not run.
 - Two failed attempts at the same approach: question the assumption and take a
-  simpler path or consult Oracle.
+  simpler path, or have a subagent with fresh context review the approach.
 
 ## Bugs and Tests
 
@@ -107,12 +119,11 @@ the code share its misunderstandings.
   have not found the cause; say so instead of fixing blind.
 - After the fix, ask whether this mistake can be made impossible: a type, a
   lint rule, or an API that cannot be misused. Prefer that over a test when
-  it is cheap. When the same kind of mistake shows up a second time, it must
-  become such a check.
-- Otherwise, keep the reproduction as one regression test. New tests come only
-  from real bugs and from behavior the user described, never for coverage.
-- A test asserts what the user sees or what the program outputs, not internal
-  calls or routing. Do not mock the code under test.
+  it is cheap. When the same kind of mistake shows up a second time, load the
+  `mistakes-to-lint-rules` skill and make it such a check.
+- Otherwise, keep the reproduction as one regression test.
+- Before writing, changing, or reviewing any test, load the
+  `tests-that-catch-bugs` skill.
 - Do not edit or delete an existing test to make it pass. Change a test only
   when the request plainly changes the behavior it checks; otherwise a failing
   test means your change is wrong.
@@ -144,5 +155,6 @@ Done means: success criteria met, final checks passed once. Then stop. Do not
 add follow-up todos, improvements, extra tests, or extra files.
 
 Report in Traditional Chinese (繁體中文), a few lines: result; what changed;
-what was verified; then, only if any exist, assumptions made, decision records
-written, unrelated problems noticed, and actions awaiting approval.
+what was verified, each with the command run and its result; then, only if any
+exist, assumptions made, decision records written, unrelated problems noticed,
+and actions awaiting approval.
