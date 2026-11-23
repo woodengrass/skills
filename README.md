@@ -1,16 +1,19 @@
-# 個人用 Skills
+# Personal Skills
 
-這個倉庫收錄我自用的 coding agent 技能和工作指引。
+[繁體中文](./README.zh-TW.md)
 
-- [`AGENTS.md`](./AGENTS.md)：工作指引，涵蓋工作範圍、驗證方式與決策紀錄。
-- [`skill/adr/SKILL.md`](./skill/adr/SKILL.md)：`adr` 技能，用 `GOALS.md` 記錄專案目標，並在相關程式碼旁用 `*.adr.md` 記下長期決策。
-- [`skill/tests-that-catch-bugs/SKILL.md`](./skill/tests-that-catch-bugs/SKILL.md)：提供給agent撰寫測試用的技能。
-- [`skill/mistakes-to-lint-rules/SKILL.md`](./skill/mistakes-to-lint-rules/SKILL.md)：把反覆出現、可客觀判定的錯誤，轉成型別或 API 限制，或用 lint 規則攔下並提示改法。
+This repository contains the skills and working instructions I use with coding agents.
 
-## 安裝
+- [`AGENTS.md`](./AGENTS.md): Working instructions covering scope, verification, and decision records.
+- [`adr`](./skill/adr/SKILL.md): Document project goals in `GOALS.md` and record lasting decisions in `*.adr.md` files next to the relevant code.
+- [`tests-that-catch-bugs`](./skill/tests-that-catch-bugs/SKILL.md): Write and review tests that fail when the behavior they cover breaks.
+- [`mistakes-to-lint-rules`](./skill/mistakes-to-lint-rules/SKILL.md): Prevent recurring, objectively detectable mistakes with types or API constraints, or catch them with lint rules that explain how to fix them.
+- [`github-actions-ci`](./skill/github-actions-ci/SKILL.md): Set up or review GitHub Actions CI, run existing checks on every pull request, and verify that each gate fails when it should.
 
-把下面的 prompt 貼給你正在使用的 coding agent：
+## Installation
+
+Paste this prompt into your coding agent:
 
 ```text
-請讀取 https://raw.githubusercontent.com/woodengrass/skill/main/INSTALL.md 並依照指引幫我安裝。
+Read https://raw.githubusercontent.com/woodengrass/skills/main/INSTALL.md and follow the instructions to help me install.
 ```
