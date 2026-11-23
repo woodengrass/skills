@@ -17,6 +17,8 @@ Before writing tests, list 3–8 numbered, checkable statements of what the chan
 - Good: `B1: Pressing Enter and then moving the cursor quickly opens the file that was selected when Enter was pressed.`
 - Bad: `File opening works correctly.` (cannot be checked)
 
+**Capture what must not change.** If the change touches output the user sees (a screen, a format, a message) and no test pins that output today, save it as a reference file before changing any code. For a screen, record every cell's character and colors at fixed sizes. If the user accepted a specific version, or the work must match a reference implementation, capture that version instead of the current code. Keep reference files where the project already keeps them, otherwise in `tests/golden/`, and name each after what it protects (`files_panel_accepted_look`, not `snapshot_1`). From then on, section 6 governs every change to it.
+
 ## 2. Decide how each statement is guarded, before writing any test
 
 For each statement, search the existing tests first: names, docstrings and assertions. Search by the key nouns and verbs of the behavior and their synonyms, not by the exact wording (`locked mode`, `lock`, `passes shortcut through` can all describe one behavior).
@@ -72,7 +74,7 @@ No proof needed for: pure refactors where no test file changed, or tests that we
 | Re-implementing the logic inside the test and comparing | Test and code are wrong together |
 | `sleep()` then assert | Slow on fast machines, flaky on slow CI, hides races. Poll until the condition holds, fail on timeout |
 | Loose assertions (`assert result`, `assert len(x) > 0`) or wrapping in `try/except` | The test can almost never fail |
-| Snapshotting a whole output without naming the property it protects | Breaks on every change; people blindly update it |
+| Snapshotting a whole output without naming the property it protects (a named reference of accepted or pre-change output, section 1, is allowed) | Breaks on every change; people blindly update it |
 | Parametrizing the same assertion over many inputs that take the same code path | Ten runs of one check are one test, not ten |
 | Files grouped by when bugs were found (`test_*_regressions.py`) | Hides duplicates; tests belong with the behavior they guard |
 
@@ -101,6 +103,7 @@ def test_open_editor_with_space(tmp_path, monkeypatch):
 ## 6. Never weaken existing tests to get green
 
 - Do not edit, delete, skip, mark as expected-failure, or loosen an existing test to make your change pass.
+- Changing what counts as correct output is changing the spec. That covers editing an expected value, a golden file or a screen assertion, and also writing a new test that expects output different from what the program produced before this change. Do it only when the request asks for that behavior change. Otherwise keep the old output; if the request cannot be met without changing it, do not change it: report which output would change and why, and let the user decide.
 - If you believe an existing test is wrong, stop. Report which test, which behavior it guards, and why you think it is wrong. Let the user decide.
 - Strengthening an existing test (section 2 or 3) is allowed and encouraged. Report it.
 - You may delete a test **you wrote in this change** if it guards nothing (section 4). Do not delete existing tests on your own; propose a consolidation plan instead (section 7).
@@ -146,3 +149,4 @@ Then list:
 3. **Consolidation plans** (section 7).
 4. **Centralization proposals** (section 2 family rule).
 5. **Suggested rules**: mistakes that a lint rule, a type or a design change could prevent instead of a test.
+6. **Reference and expected-output changes** (always present): every reference file or expected output this change altered, and the part of the request that asked for it. Write "none" if there are none.
