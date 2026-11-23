@@ -82,6 +82,28 @@ Write `.github/workflows/ci.yml`:
   extension and commit it. If the lockfile cannot be used, pin each `uses:` to
   a full 40-character commit SHA with a `# vX.Y.Z` comment, and write a
   decision record (`adr` skill) saying why.
+- If the project keeps reference files of accepted output (`tests/golden/`,
+  a snapshot directory; see `tests-that-catch-bugs` section 1), add a
+  `spec-guard` job. A pull request that changes them must carry a
+  `Spec-change:` line in at least one commit message, so a change to what
+  counts as correct can never pass unnoticed:
+  ```yaml
+  spec-guard:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with: { fetch-depth: 0, persist-credentials: false }
+      - env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          REFS: '^tests/golden/'
+        run: |
+          if git diff --name-only "$BASE"...HEAD | grep -qE "$REFS"; then
+            git log --format=%B "$BASE"..HEAD | grep -q '^Spec-change:' \
+              || { echo "::error::reference files changed without a Spec-change: line"; exit 1; }
+          fi
+  ```
 
 ## 3. When the full check is slow
 
@@ -98,7 +120,8 @@ A green run proves nothing until each gate has been seen to turn red.
   installed.
 - First setup: open a throwaway draft pull request. Confirm the clean version
   is green. Then, one gate at a time, push a commit that breaks only that gate
-  (a lint violation, a type error, a failing assertion, a build error). Wait
+  (a lint violation, a type error, a failing assertion, a build error, a
+  reference file changed without `Spec-change:`). Wait
   with `gh pr checks <number> --watch --fail-fast`; it must fail at that gate
   with the expected message. Revert the commit and move to the next gate.
   Close the pull request and delete the branch when done.
