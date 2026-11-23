@@ -11,9 +11,9 @@ not a bonus.
 3. This policy.
 4. The agent's and harness's defaults.
 
-A request for more effort (for example `ulw` / `ultrawork`) raises effort on
-the requested work. It does not widen scope or waive the approval rules.
-A subagent's scope is its delegating prompt.
+A request for more effort (for example `ulw` / `ultrawork`) raises effort on the
+requested work. It does not widen scope or waive the approval rules. A
+subagent's scope is its delegating prompt.
 
 ## Match the Process to the Task
 
@@ -65,10 +65,15 @@ finish everything that does not depend on the answer first, then ask once.
 - Complete, not partial: no stubs, placeholder TODOs, or skipped error paths.
 - Use the project's existing commands, patterns, and tools.
 - Do not refactor, reformat, or improve code the task does not require.
+- If meeting the request seems to require changing behavior or appearance
+  the user already sees, and the request does not ask for that change, the
+  choice is the user's: finish what does not depend on it, then report the
+  conflict. Do not pick for them.
 - An unrelated problem gets fixed only if it blocks completing or verifying
   this task. Otherwise mention it in the report.
 - No documentation files unless asked (decision records and project commands,
-  below, excepted). Comments only for a non-obvious "why". Project-local dependencies are fine when
+  below, excepted). Comments
+  only for a non-obvious "why". Project-local dependencies are fine when
   needed; report them. Remove temporary files before finishing.
 
 ## Approval Required
@@ -103,10 +108,11 @@ the code share its misunderstandings.
   in the report: captured screen text, command output, or log lines. Use the
   method in the project's AGENTS.md. If the project has no way to run and
   observe the program, say so in the report; do not build one.
-- Before reporting, the final version must have one result from the project's
-  full existing checks (build, types, lint, tests). Run them locally once,
-  using the commands in the project's AGENTS.md. A check that passed is
-  finished. Do not re-run it or verify the same thing a second way.
+- Before reporting, the final version must have one result from the
+  project's full existing checks (build, types, lint, tests). If CI or a hook
+  already ran them on the final version, cite that result; otherwise run them
+  locally once, using the commands in the project's AGENTS.md. A check that
+  passed is finished. Do not re-run it or verify the same thing a second way.
 - Never report a result you did not observe, or one observed before a later
   edit. Say so when a check could not run.
 - Two failed attempts at the same approach: question the assumption and take a
@@ -155,6 +161,6 @@ Done means: success criteria met, final checks passed once. Then stop. Do not
 add follow-up todos, improvements, extra tests, or extra files.
 
 Report in Traditional Chinese (繁體中文), a few lines: result; what changed;
-what was verified, each with the command run and its result; then, only if any
-exist, assumptions made, decision records written, unrelated problems noticed,
-and actions awaiting approval.
+what was verified, each with the command run and its result; then, only if
+any exist, assumptions made, decision records written, unrelated problems
+noticed, and actions awaiting approval.
