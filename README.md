@@ -9,6 +9,7 @@ This repository contains the skills and working instructions I use with coding a
 - [`tests-that-catch-bugs`](./skill/tests-that-catch-bugs/SKILL.md): Write and review tests that fail when the behavior they cover breaks.
 - [`mistakes-to-lint-rules`](./skill/mistakes-to-lint-rules/SKILL.md): Prevent recurring, objectively detectable mistakes with types or API constraints, or catch them with lint rules that explain how to fix them.
 - [`github-actions-ci`](./skill/github-actions-ci/SKILL.md): Set up or review GitHub Actions CI, run existing checks on every pull request, and verify that each gate fails when it should.
+- [`opencode/`](./opencode/README.md): Optional. My OpenCode V2 setup (agent roles, permissions, plugins) with its own `AGENTS.md`, using the skills above; installed with `opencode/install.sh`.
 
 ## Installation
 
