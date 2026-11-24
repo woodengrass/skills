@@ -14,11 +14,12 @@ git clone https://github.com/woodengrass/skills.git /tmp/skills && /tmp/skills/o
 
 `install.sh` 依序完成以下步驟，已經做過的會跳過：
 1. 檢查 git、node、bun 是否已安裝。
-2. 安裝 OpenCode 2.4.1 和 Claude Code。
-3. 把 agents、roles、plugins、scripts、設定檔、`opencode/AGENTS.md` 和 `skill/` 複製到 `~/.config/opencode`。內容一樣的跳過；不一樣的，舊的移到 `~/.config/opencode.backup-<時間>/`，不會刪除。這份設定沒有的檔案（本機外掛、`service.json`）不會動到。
+2. 沒有 OpenCode 就裝最新的 V2，已經有 V2 就不動版本；裝的是 V1 會停下來。沒有 Claude Code 就安裝。
+3. 把 agents、roles、plugins、scripts、設定檔、`opencode/AGENTS.md` 和 `skill/` 複製到 `~/.config/opencode`。內容一樣的跳過；不一樣的，舊的移到 `~/.config/opencode.backup-<時間>/`，不會刪除。舊的 `opencode.json` 也移到備份（OpenCode 會把它和 `opencode.jsonc` 合併）。其他檔案（本機外掛、`service.json`）不會動到。
 4. 把 `~/.local/bin` 加進 PATH。
 5. 設定背景服務的環境變數。
-6. 跑外掛測試，並列出 MCP 狀態。
+6. 列出不屬於這套設定的外掛，標出 V1 這類 V2 不支援的，讓你決定要不要刪。
+7. 跑外掛測試，並列出 MCP 狀態。
 
 要更新，就再跑一次安裝 prompt 或上面的指令。
 

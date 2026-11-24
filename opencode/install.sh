@@ -18,7 +18,6 @@ esac
 REPO="$(cd "$(dirname "$0")/.." && pwd -P)"
 TARGET="$HOME/.config/opencode"
 BACKUP="$HOME/.config/opencode.backup-$(date +%Y%m%d%H%M%S)"
-OPENCODE_VERSION="2.4.1"
 CLAUDE="$HOME/.local/bin/claude"
 
 say() { printf '\n==> %s\n' "$1"; }
@@ -39,11 +38,16 @@ if [ -n "$missing" ]; then
   exit 1
 fi
 
-say "OpenCode $OPENCODE_VERSION"
-if [ "$(opencode --version 2>/dev/null || true)" = "opencode v$OPENCODE_VERSION" ]; then
-  echo "已安裝"
+say "OpenCode V2"
+current="$(opencode --version 2>/dev/null || true)"
+major="$(printf '%s' "$current" | sed -n 's/^[^0-9]*\([0-9][0-9]*\).*/\1/p')"
+if [ -z "$current" ]; then
+  npm install -g --allow-scripts=@opencode/cli @opencode/cli
+elif [ "${major:-0}" -ge 2 ]; then
+  echo "已安裝：$current，不更動版本"
 else
-  npm install -g --allow-scripts=@opencode/cli "@opencode/cli@$OPENCODE_VERSION"
+  echo "這台裝的是 OpenCode V1（$current）。這套設定只支援 V2，請先移除 V1 再執行。" >&2
+  exit 1
 fi
 
 say "Claude Code（lead 透過它執行）"
@@ -85,6 +89,40 @@ for dir in "$REPO"/opencode/plugins/*/; do
 done
 place skills "$REPO/skill"
 place AGENTS.md "$REPO/opencode/AGENTS.md"
+# OpenCode reads opencode.json as well as opencode.jsonc and merges them, so an old one would mix into this setup.
+if [ -e "$TARGET/opencode.json" ] || [ -L "$TARGET/opencode.json" ]; then
+  mkdir -p "$BACKUP"
+  mv "$TARGET/opencode.json" "$BACKUP/opencode.json"
+  echo "舊的 opencode.json 移到 $BACKUP/opencode.json（OpenCode 會把它和 opencode.jsonc 合併）"
+fi
+
+say "不屬於這套設定的外掛"
+# Listed for the user to decide; nothing here is changed.
+others=0
+for path in "$TARGET"/plugins/*; do
+  [ -e "$path" ] || continue
+  name="$(basename "$path")"
+  [ -d "$REPO/opencode/plugins/$name" ] && continue
+  if grep -rqs --exclude-dir=node_modules '@opencode/plugin' "$path"; then kind="V2 外掛"
+  elif grep -rqs --exclude-dir=node_modules '@opencode-ai/plugin' "$path"; then kind="V1 外掛，V2 不支援"
+  else kind="看不出版本"; fi
+  echo "plugins/$name：$kind"
+  others=$((others + 1))
+done
+for old in "$BACKUP/opencode.json" "$TARGET/package.json"; do
+  [ -f "$old" ] || continue
+  listed="$(node -e '
+    const text = require("fs").readFileSync(process.argv[1], "utf8");
+    let config; try { config = JSON.parse(text); } catch { process.exit(0); }
+    for (const key of ["plugin", "plugins"]) for (const item of [].concat(config[key] ?? [])) console.log(`${key}: ${typeof item === "string" ? item : JSON.stringify(item)}`);
+    for (const dep of Object.keys(config.dependencies ?? {})) console.log(`dependency: ${dep}`);
+  ' "$old")"
+  [ -n "$listed" ] || continue
+  echo "$old 裡列的："
+  printf '%s\n' "$listed" | sed 's/^/  /'
+  others=$((others + 1))
+done
+[ "$others" -gt 0 ] || echo "沒有"
 
 say "PATH"
 line='export PATH="$HOME/.local/bin:$PATH"'
