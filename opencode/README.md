@@ -6,20 +6,23 @@
 
 ## 安裝（Mac）
 
+最簡單的方式是把根目錄 README 的安裝 prompt 貼給 coding agent，選「OpenCode V2 setup」。agent 會問你要裝什麼，把 repo clone 到暫存資料夾、執行 `install.sh`，裝完再刪掉。也可以自己執行：
+
 ```sh
-git clone https://github.com/woodengrass/skills.git ~/code/skills
-~/code/skills/opencode/install.sh
+git clone https://github.com/woodengrass/skills.git /tmp/skills && /tmp/skills/opencode/install.sh && rm -rf /tmp/skills
 ```
 
 `install.sh` 依序完成以下步驟，已經做過的會跳過：
 1. 檢查 git、node、bun 是否已安裝。
 2. 安裝 OpenCode 2.4.1 和 Claude Code。
-3. 把 `~/.config/opencode` 裡的項目用 symlink 指向這個 repo，包括 `opencode/AGENTS.md` 和 `skill/`。原本就在的檔案會移到 `~/.config/opencode.backup-<時間>/`，不會刪除。
+3. 把 agents、roles、plugins、scripts、設定檔、`opencode/AGENTS.md` 和 `skill/` 複製到 `~/.config/opencode`。內容一樣的跳過；不一樣的，舊的移到 `~/.config/opencode.backup-<時間>/`，不會刪除。這份設定沒有的檔案（本機外掛、`service.json`）不會動到。
 4. 把 `~/.local/bin` 加進 PATH。
 5. 設定背景服務的環境變數。
 6. 跑外掛測試，並列出 MCP 狀態。
 
-之後要更新，只要在 repo 裡 `git pull`，所有連結自動指到新內容。
+要更新，就再跑一次安裝 prompt 或上面的指令。
+
+在用來修改這套設定的電腦上，改用 `install.sh --link`：`~/.config/opencode` 會用 symlink 指向 clone，所以 clone 要留著；在 repo 裡改的內容立即生效，`git pull` 就是更新。
 
 ## 裡面有什麼
 

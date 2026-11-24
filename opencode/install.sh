@@ -1,9 +1,19 @@
 #!/bin/sh
-# Installs this OpenCode setup on a Mac by linking ~/.config/opencode to this repository.
-# Clone the repository anywhere (for example ~/code/skills) and run opencode/install.sh.
-# Safe to run again: each step checks whether it is already done. Nothing is deleted; anything in the
-# way is moved to a timestamped backup folder.
+# Installs this OpenCode setup on a Mac by copying it into ~/.config/opencode.
+# Clone the repository anywhere, run opencode/install.sh, then the clone can be deleted. To update, run it
+# again from a fresh clone.
+# With --link it links ~/.config/opencode to the clone instead, so the clone must stay; use this on the
+# computer where you edit the setup.
+# Safe to run again: each step checks whether it is already done. Nothing is deleted; anything it replaces
+# is moved to a timestamped backup folder.
 set -eu
+
+MODE=copy
+case "${1:-}" in
+  --link) MODE=link ;;
+  "") ;;
+  *) echo "用法：install.sh [--link]" >&2; exit 2 ;;
+esac
 
 REPO="$(cd "$(dirname "$0")/.." && pwd -P)"
 TARGET="$HOME/.config/opencode"
@@ -43,14 +53,16 @@ else
   curl -fsSL https://claude.ai/install.sh | bash
 fi
 
-say "連結 ~/.config/opencode 到這個 repo"
+if [ "$MODE" = link ]; then say "連結 ~/.config/opencode 到這個 repo"; else say "複製設定到 ~/.config/opencode"; fi
 mkdir -p "$TARGET/plugins"
-# link <path inside ~/.config/opencode> <target inside the repo>
-link() {
+# place <path inside ~/.config/opencode> <source inside the repo>
+place() {
   dest="$TARGET/$1"
   src="$2"
-  if [ -L "$dest" ] && [ "$(readlink "$dest")" = "$src" ]; then
-    echo "已連結：$1"
+  if [ "$MODE" = link ]; then
+    if [ -L "$dest" ] && [ "$(readlink "$dest")" = "$src" ]; then echo "已連結：$1"; return; fi
+  elif [ ! -L "$dest" ] && [ -e "$dest" ] && diff -rq "$src" "$dest" >/dev/null 2>&1; then
+    echo "已是最新：$1"
     return
   fi
   if [ -e "$dest" ] || [ -L "$dest" ]; then
@@ -58,16 +70,21 @@ link() {
     mv "$dest" "$BACKUP/$1"
     echo "原本的 $1 移到 $BACKUP/$1"
   fi
-  ln -s "$src" "$dest"
-  echo "連結：$1 -> $src"
+  if [ "$MODE" = link ]; then
+    ln -s "$src" "$dest"
+    echo "連結：$1 -> $src"
+  else
+    cp -R "$src" "$dest"
+    echo "複製：$1"
+  fi
 }
-for item in agents roles scripts opencode.jsonc tui.json; do link "$item" "$REPO/opencode/$item"; done
+for item in agents roles scripts opencode.jsonc tui.json; do place "$item" "$REPO/opencode/$item"; done
 for dir in "$REPO"/opencode/plugins/*/; do
   name="$(basename "$dir")"
-  link "plugins/$name" "$REPO/opencode/plugins/$name"
+  place "plugins/$name" "$REPO/opencode/plugins/$name"
 done
-link skills "$REPO/skill"
-link AGENTS.md "$REPO/opencode/AGENTS.md"
+place skills "$REPO/skill"
+place AGENTS.md "$REPO/opencode/AGENTS.md"
 
 say "PATH"
 line='export PATH="$HOME/.local/bin:$PATH"'
@@ -85,8 +102,9 @@ opencode service status || true
 
 say "外掛自我檢查"
 for dir in "$REPO"/opencode/plugins/*/ "$REPO/opencode/scripts/"; do
-  name="${dir#"$REPO/"}"
-  if (cd "$dir" && "$BUN" test >/dev/null 2>&1); then echo "通過：$name"; else echo "失敗：$name（在該目錄執行 bun test 看細節）"; fi
+  name="${dir#"$REPO/opencode/"}"
+  dir="$TARGET/$name"
+  if (cd "$dir" && "$BUN" test >/dev/null 2>&1); then echo "通過：$name"; else echo "失敗：$name（在 $dir 執行 bun test 看細節）"; fi
 done
 
 say "MCP 狀態"

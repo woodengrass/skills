@@ -9,7 +9,7 @@
 - [`tests-that-catch-bugs`](./skill/tests-that-catch-bugs/SKILL.md)：撰寫和審查測試，確認受測行為出錯時，測試會失敗。
 - [`mistakes-to-lint-rules`](./skill/mistakes-to-lint-rules/SKILL.md)：把反覆出現、可客觀判定的錯誤，轉成型別或 API 限制，或用 lint 規則攔下並提示改法。
 - [`github-actions-ci`](./skill/github-actions-ci/SKILL.md)：設定或審查 GitHub Actions CI，讓每個 PR 跑完專案現有的檢查，並驗證各項檢查能攔下對應的錯誤。
-- [`opencode/`](./opencode/README.md)：選用。我在 OpenCode V2 上的設定（角色、權限、外掛），有自己的一份 `AGENTS.md`，skills 用上面這些；用 `opencode/install.sh` 安裝。
+- [`opencode/`](./opencode/README.md)：選用。我在 OpenCode V2 上的設定（角色、權限、外掛），有自己的一份 `AGENTS.md`，skills 用上面這些；可以用下面的 prompt 安裝，或直接執行 `opencode/install.sh`。
 
 ## 安裝
 
