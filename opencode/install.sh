@@ -57,38 +57,46 @@ else
   curl -fsSL https://claude.ai/install.sh | bash
 fi
 
-if [ "$MODE" = link ]; then say "連結 ~/.config/opencode 到這個 repo"; else say "複製設定到 ~/.config/opencode"; fi
-mkdir -p "$TARGET/plugins"
-# place <path inside ~/.config/opencode> <source inside the repo>
-place() {
-  dest="$TARGET/$1"
-  src="$2"
-  if [ "$MODE" = link ]; then
+if [ "$MODE" = link ]; then
+  say "連結 ~/.config/opencode 到這個 repo"
+  mkdir -p "$TARGET/plugins"
+  # link <path inside ~/.config/opencode> <source inside the repo>
+  link() {
+    dest="$TARGET/$1"
+    src="$2"
     if [ -L "$dest" ] && [ "$(readlink "$dest")" = "$src" ]; then echo "已連結：$1"; return; fi
-  elif [ ! -L "$dest" ] && [ -e "$dest" ] && diff -rq "$src" "$dest" >/dev/null 2>&1; then
-    echo "已是最新：$1"
-    return
-  fi
-  if [ -e "$dest" ] || [ -L "$dest" ]; then
-    mkdir -p "$(dirname "$BACKUP/$1")"
-    mv "$dest" "$BACKUP/$1"
-    echo "原本的 $1 移到 $BACKUP/$1"
-  fi
-  if [ "$MODE" = link ]; then
+    if [ -e "$dest" ] || [ -L "$dest" ]; then
+      mkdir -p "$(dirname "$BACKUP/$1")"
+      mv "$dest" "$BACKUP/$1"
+      echo "原本的 $1 移到 $BACKUP/$1"
+    fi
     ln -s "$src" "$dest"
     echo "連結：$1 -> $src"
-  else
-    cp -R "$src" "$dest"
-    echo "複製：$1"
-  fi
-}
-for item in agents roles scripts opencode.jsonc tui.json; do place "$item" "$REPO/opencode/$item"; done
-for dir in "$REPO"/opencode/plugins/*/; do
-  name="$(basename "$dir")"
-  place "plugins/$name" "$REPO/opencode/plugins/$name"
-done
-place skills "$REPO/skill"
-place AGENTS.md "$REPO/opencode/AGENTS.md"
+  }
+  for item in agents roles scripts opencode.jsonc tui.json; do link "$item" "$REPO/opencode/$item"; done
+  for dir in "$REPO"/opencode/plugins/*/; do
+    name="$(basename "$dir")"
+    link "plugins/$name" "$REPO/opencode/plugins/$name"
+  done
+  link skills "$REPO/skill"
+  link AGENTS.md "$REPO/opencode/AGENTS.md"
+else
+  say "複製設定到 ~/.config/opencode（保留你在那裡改過的檔案）"
+  mkdir -p "$TARGET/plugins"
+  # What the last install delivered, so the sync can tell your edits from upstream changes.
+  SETUP_BASE="$HOME/.local/share/opencode-setup/base"
+  keep=""
+  # A copy made before bases were kept: a differing file may be your edit, so keep it.
+  if [ -f "$TARGET/.setup-version" ] && [ ! -d "$SETUP_BASE" ]; then keep="--keep-unknown"; fi
+  "$BUN" "$REPO/opencode/installer/sync.ts" --repo "$REPO" --target "$TARGET" --base "$SETUP_BASE" --backup "$BACKUP" $keep
+  [ -d "$BACKUP" ] && echo "備份資料夾：$BACKUP"
+fi
+# Which version this computer has: the commit it was copied from, or the clone it links to. update.sh reads it.
+if [ "$MODE" = link ]; then
+  echo "link $REPO" > "$TARGET/.setup-version"
+else
+  git -C "$REPO" rev-parse HEAD 2>/dev/null > "$TARGET/.setup-version" || echo unknown > "$TARGET/.setup-version"
+fi
 # OpenCode reads opencode.json as well as opencode.jsonc and merges them, so an old one would mix into this setup.
 if [ -e "$TARGET/opencode.json" ] || [ -L "$TARGET/opencode.json" ]; then
   mkdir -p "$BACKUP"
@@ -160,4 +168,5 @@ cat <<'EOF'
 3. 登入 OpenCode Go：               opencode auth login opencode-go
 4. 只屬於這台電腦的 MCP（例如 Xcode、JetBrains），寫成 ~/.config/opencode/plugins/ 下的本機外掛，見 opencode/README.md。
 5. 想讓某個專案在 agent 收尾時自動跑 check，見 opencode/README.md 的「check-loop」。
+6. 之後要更新：curl -fsSL https://raw.githubusercontent.com/woodengrass/skills/main/opencode/update.sh | sh
 EOF
