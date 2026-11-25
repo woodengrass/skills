@@ -129,8 +129,18 @@ export function report(found: Finding[]): string {
   const shown = found.slice(0, 10).map((item) => `- ${item.path}: \`${item.comment}\` (${item.why})`);
   if (found.length > shown.length) shown.push(`- and ${found.length - shown.length} more`);
   return [
-    "Not applied. Remove these added comments, then send the change again:",
+    "Applied. These added comments look like noise; remove them in a follow-up edit:",
     ...shown,
     "A comment that has to stay can carry @allow.",
   ].join("\n");
+}
+
+export type Content = string | Array<{ type: string; text?: string }> | undefined;
+
+// The model reads a tool's content, or its output when there is no content, so the note goes on the content.
+export function withNote(content: Content, output: unknown, note: string): Content {
+  if (typeof content === "string") return `${content}\n\n${note}`;
+  if (content !== undefined && content.length > 0) return [...content, { type: "text", text: note }];
+  const base = output === undefined ? "" : typeof output === "string" ? output : JSON.stringify(output);
+  return base === "" ? note : `${base}\n\n${note}`;
 }

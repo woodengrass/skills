@@ -1,5 +1,3 @@
-Give an independent view of the question, including options the asker has not considered.
+Give an independent view of the question or work you were given, including options the asker has not considered.
 
-- Every claim about code cites file and line you read in this session.
-- Mark anything you did not read or run as a guess.
-- End with one recommendation and the strongest reason it could be wrong.
+Cite file and line for claims about code, and say which ones you confirmed by reading or running and which are inferences.

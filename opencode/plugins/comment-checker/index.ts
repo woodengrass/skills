@@ -1,12 +1,11 @@
 import { Plugin } from "@opencode/plugin";
-import { changesOf, findings, report } from "./comments.ts";
+import { changesOf, findings, report, withNote } from "./comments.ts";
 import { deletedPaths, testFindings, testReport } from "./tests-guard.ts";
 
 const TOOLS = new Set(["edit", "write", "patch"]);
 
-// Rejects an edit before it lands when it adds comments that a program can tell are noise, or switches off or
-// deletes tests. The rejection fails
-// that one call; the model sees the reason and sends the change again.
+// Switching off or deleting tests is rejected before the edit lands. Noise comments are let through and a note
+// asking for their removal is added to that call's result, so the model is not made to resend the whole change.
 export default Plugin.define({
   id: "local.comment-checker",
   async setup(ctx) {
@@ -20,22 +19,31 @@ export default Plugin.define({
       }
       return found;
     };
+    const notes = new Map<string, string>();
 
     await ctx.tool.hook("execute.before", async (event) => {
       if (!TOOLS.has(event.tool)) return;
-      let message: string | undefined;
+      let blocked: string | undefined;
       try {
         const changes = changesOf(event.tool, event.input, await cwd(event.sessionID));
         const patchText = (event.input as { patchText?: unknown } | null)?.patchText;
         const tests = testFindings(changes, event.tool === "patch" && typeof patchText === "string" ? deletedPaths(patchText) : []);
+        if (tests.length > 0) blocked = testReport(tests);
         const comments = findings(changes);
-        const parts = [...(tests.length > 0 ? [testReport(tests)] : []), ...(comments.length > 0 ? [report(comments)] : [])];
-        message = parts.length > 0 ? parts.join("\n\n") : undefined;
+        if (blocked === undefined && comments.length > 0) notes.set(event.id, report(comments));
       } catch (error) {
         console.error("[comment-checker]", error); // a bug here must not block edits
         return;
       }
-      if (message !== undefined) throw new Error(message);
+      if (blocked !== undefined) throw new Error(blocked);
+    });
+
+    await ctx.tool.hook("execute.after", (event) => {
+      const note = notes.get(event.id);
+      if (note === undefined) return;
+      notes.delete(event.id);
+      if (event.status !== "completed") return;
+      event.result = { ...event.result, content: withNote(event.result.content, event.result.output, note) as typeof event.result.content };
     });
   },
 });

@@ -2,7 +2,6 @@
 description: Lead. Splits work, delegates, verifies results, talks to the user.
 mode: primary
 model: claude-agent/opus#high
-steps: 60
 permissions:
   - action: subagent
     resource: "*"

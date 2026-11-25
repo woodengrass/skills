@@ -2,7 +2,7 @@ import { afterEach, describe, expect, test } from "bun:test";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { changesOf, commentText, findings, parsePatch, problem, report, styleOf } from "./comments.ts";
+import { changesOf, commentText, findings, parsePatch, problem, report, styleOf, withNote } from "./comments.ts";
 
 const flagged = (path: string, ...lines: string[]) => findings([{ path, added: lines }]);
 
@@ -149,6 +149,20 @@ describe("helpers", () => {
     expect(text.split("\n").filter((line) => line.startsWith("- f"))).toHaveLength(10);
     expect(text).toContain("and 2 more");
     expect(text).toContain("@allow");
-    expect(text.startsWith("Not applied.")).toBe(true);
+    expect(text.startsWith("Applied.")).toBe(true);
+  });
+});
+
+describe("withNote", () => {
+  test("appends to string content", () => {
+    expect(withNote("Edited a.ts", undefined, "N")).toBe("Edited a.ts\n\nN");
+  });
+  test("adds a text part to array content", () => {
+    expect(withNote([{ type: "text", text: "ok" }], undefined, "N")).toEqual([{ type: "text", text: "ok" }, { type: "text", text: "N" }]);
+  });
+  test("falls back to the output when there is no content", () => {
+    expect(withNote(undefined, "Wrote a.ts", "N")).toBe("Wrote a.ts\n\nN");
+    expect(withNote([], { ok: true }, "N")).toBe('{"ok":true}\n\nN');
+    expect(withNote(undefined, undefined, "N")).toBe("N");
   });
 });
