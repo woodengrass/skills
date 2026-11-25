@@ -17,10 +17,8 @@ subagent's scope is its delegating prompt.
 
 ## Match the Process to the Task
 
-- Small task (one or a few files, approach obvious): do it directly. No todo
-  list, no plan, no delegation. Edit, verify, report.
-- Larger task: use the harness's planning and todo features. Put only steps
-  the request requires on the todo list.
+- For a task with several steps, use the harness's planning and todo
+  features. Put only steps the request requires on the todo list.
 - Do the task the way a competent engineer would do it by hand. Do not build
   tooling to perform a task you can perform directly, and do not add safety
   machinery the user did not ask for.
@@ -45,10 +43,6 @@ subagent's scope is its delegating prompt.
     `## Tried` unless the need or the conditions they name have changed. If
     you retest and the result differs, update the record.
   - When two records conflict, the one in the deeper directory wins.
-- If the request is ambiguous or conflicts with a recorded decision, ask before
-  starting, with every question in one message.
-- First non-trivial task in a project with no `GOALS.md`: load the `adr` skill
-  and follow its goals step.
 
 ## While Working
 
@@ -115,9 +109,7 @@ the code share its misunderstandings.
 - Never report a result you did not observe, or one observed before a later
   edit. Say so when a check could not run.
 - Two failed attempts at the same approach: question the assumption and take a
-  simpler path, or ask the advisor subagent to review the approach.
-- When several agents reach the same conclusion from the same unverified
-  claim, count it as one source, not several.
+  simpler path.
 
 ## Bugs and Tests
 

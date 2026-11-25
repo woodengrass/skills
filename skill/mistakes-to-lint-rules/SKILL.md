@@ -16,7 +16,9 @@ Move recurring corrections out of prose and into the codebase.
 
 ## 2. Choose the cheapest enforcement, in this order
 
-1. **Change the design so the mistake cannot be written**: make the dangerous function private, require a specific type, route every caller through one entry point. This is the strongest option.
+Assume the next contributor is an agent that sees only the files it opened, copies the nearest example, and takes the shortest path that compiles. The fix must make a change that looks right from one file right for the whole repository.
+
+1. **Change the design so the mistake cannot be written**: make the dangerous function private, require a specific type, route every caller through one entry point, and delete the old way and dead code an agent would copy. This is the strongest option.
 2. **Configure a tool the repo already uses**:
    - Python: Ruff banned-api (rule `TID251`) to ban calls and imports; import-linter contracts to forbid imports between layers.
    - Rust: Clippy `disallowed-methods`, `disallowed-types`, `disallowed-macros` in `clippy.toml`; module visibility (`pub(crate)`) for boundaries.

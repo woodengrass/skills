@@ -87,7 +87,7 @@ function main() {
   for (const [agent, row] of [...byAgent].sort((a, b) => b[1].child - a[1].child))
     out.push(`| ${agent} | ${row.root} | ${row.child} | ${row.cost.toLocaleString("en-US")} |`);
 
-  const workers = sessions.filter((s) => s.parent !== null && (s.agent === "worker" || s.agent === "worker-deep"));
+  const workers = sessions.filter((s) => s.parent !== null && (s.agent === "quick" || s.agent === "worker" || s.agent === "worker-deep"));
   let completedNoCheck = 0;
   let completedFailing = 0;
   let small = 0;

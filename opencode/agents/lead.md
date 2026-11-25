@@ -7,6 +7,9 @@ permissions:
     resource: "*"
     effect: deny
   - action: subagent
+    resource: quick
+    effect: allow
+  - action: subagent
     resource: worker
     effect: allow
   - action: subagent

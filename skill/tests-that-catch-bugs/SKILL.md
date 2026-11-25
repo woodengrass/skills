@@ -41,6 +41,7 @@ Then choose, in this order:
 2. If one exists, strengthen it until it fails on the bug. That strengthened test is your reproduction. Explain in the report why it missed the bug.
 3. If none exists, write a new reproduction test following section 2.
 4. Either way, see it fail before the fix and record the failure message.
+5. If the only way to reproduce it as a test needs broad harness setup, mocks of your own code, production-only state or slow end-to-end infrastructure, do not add a test. Reproduce it with the closest real check instead (a script, a command, a run of the program), record that it fails before the fix and passes after, and say in the report why no test was added. No new test beats a bad one.
 
 ## 4. Prove every new or changed test can fail, and is worth having
 
