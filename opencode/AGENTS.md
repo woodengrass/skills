@@ -97,10 +97,10 @@ the code share its misunderstandings.
 
 - While working, run only the checks related to what you just changed.
 - If the change affects what the user sees or does, run the real program once
-  and exercise the changed behavior the way the user would. Put the evidence
-  in the report: captured screen text, command output, or log lines. Use the
-  method in the project's AGENTS.md. If the project has no way to run and
-  observe the program, say so in the report; do not build one.
+  and exercise the changed behavior the way the user would. Load the
+  `verify-app` skill for this; it uses the project's existing method or sets
+  up the smallest one. Put the evidence in the report: captured screen text,
+  command output, or log lines.
 - Before reporting, the final version must have one result from the
   project's full existing checks (build, types, lint, tests). If CI or a hook
   already ran them on the final version, cite that result; otherwise run them
@@ -116,6 +116,7 @@ the code share its misunderstandings.
 - Fixing a bug: first reproduce it with real behavior and confirm it fails for
   the reason the user saw. Only then fix it. If you cannot reproduce it, you
   have not found the cause; say so instead of fixing blind.
+  When the cause is not yet known, load the `debugging` skill.
 - After the fix, ask whether this mistake can be made impossible: a type, a
   lint rule, or an API that cannot be misused. Prefer that over a test when
   it is cheap. When the same kind of mistake shows up a second time, load the
@@ -147,6 +148,13 @@ commands, plus any operational fact that cost you time to find, such as which
 config file is actually loaded or what must be restarted. One line each.
 No descriptions of the codebase and nothing the repository already states.
 Mention the addition in one sentence.
+
+## Git
+
+Before your first git command that changes something (a branch, a commit, a
+push), load the `git` skill. In a git repository, work on a branch, commit
+after each step that works, and when the task is done, prepare the pull
+request as the skill says.
 
 ## Done
 
