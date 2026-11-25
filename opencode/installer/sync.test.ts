@@ -138,3 +138,19 @@ test("merge returns undefined on overlapping changes", () => {
   expect(merge(Buffer.from("l\n"), b, Buffer.from("n\n"))).toBeUndefined();
   expect(merge(Buffer.from("x\n"), b, Buffer.from("n\n"))?.toString()).toBe("n\n");
 });
+
+test("a link moved aside after an earlier install is still replaced by the full setup", () => {
+  run();
+  const clone = join(root, "clone");
+  put(join(clone, "lead.md"), "clone file\n");
+  rmSync(join(target, "roles"), { recursive: true });
+  symlinkSync(clone, join(target, "roles"));
+  expect(run()).toEqual(["roles replaced", "roles/lead.md added"]);
+  expect(get(join(target, "roles", "lead.md"))).toBe("a\nb\nc\nd\ne\n");
+});
+
+test("merge handles output larger than a megabyte", () => {
+  const body = ("x".repeat(99) + "\n").repeat(15000);
+  const merged = merge(Buffer.from(`top-local\n${body}end\n`), Buffer.from(`top\n${body}end\n`), Buffer.from(`top\n${body}end-new\n`));
+  expect(merged?.toString()).toBe(`top-local\n${body}end-new\n`);
+});

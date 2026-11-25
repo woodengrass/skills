@@ -64,8 +64,9 @@ export function merge(local: Buffer, base: Buffer, incoming: Buffer): Buffer | u
     writeFileSync(l, local);
     writeFileSync(b, base);
     writeFileSync(n, incoming);
-    const result = spawnSync("git", ["merge-file", "-p", l, b, n]);
-    return result.status === 0 ? result.stdout : undefined;
+    // The default output cap (1 MiB) cuts the merge short without an error, so allow far more.
+    const result = spawnSync("git", ["merge-file", "-p", l, b, n], { maxBuffer: 1 << 30 });
+    return result.status === 0 && result.error === undefined ? result.stdout : undefined;
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -75,8 +76,10 @@ export function sync(items: Item[], options: Options): Event[] {
   const events: Event[] = [];
   for (const item of items) {
     // A link left by --link would make every write land in the linked clone, so it is moved aside first.
+    // Nothing local is left after that, so the base no longer describes it and the item is installed afresh.
     const top = join(options.target, item.dest);
-    if (isLink(top)) {
+    const movedLink = isLink(top);
+    if (movedLink) {
       moveTo(top, join(options.backup, item.dest));
       events.push({ path: item.dest, what: "replaced" });
     }
@@ -89,7 +92,7 @@ export function sync(items: Item[], options: Options): Event[] {
       const localPath = at(options.target, file);
       const backupPath = at(options.backup, file);
       const N = read(srcPath);
-      const B = read(at(options.base, file));
+      const B = movedLink ? undefined : read(at(options.base, file));
       const L = read(localPath);
       if (same(N, L)) continue;
       if (L === undefined) {
