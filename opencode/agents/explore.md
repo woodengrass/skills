@@ -1,7 +1,7 @@
 ---
 description: Read-only wide search of the codebase. Returns file and line references with one-line notes.
 mode: subagent
-model: openai/gpt-6.1-terra#medium
+model: openai/gpt-6-luna-fast#high
 permissions:
   - action: edit
     resource: "*"

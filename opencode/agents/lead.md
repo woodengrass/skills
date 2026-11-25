@@ -13,6 +13,9 @@ permissions:
     resource: worker-deep
     effect: allow
   - action: subagent
+    resource: reviewer
+    effect: allow
+  - action: subagent
     resource: advisor
     effect: allow
   - action: subagent
