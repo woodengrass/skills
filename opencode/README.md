@@ -37,6 +37,7 @@ git clone https://github.com/woodengrass/skills.git /tmp/skills && /tmp/skills/o
 | `plugins/adr-inject` | 讀或改檔案時，把 GOALS.md 和相關的 `*.adr.md` 放進指示。壓縮對話後仍會保留 |
 | `plugins/comment-checker` | 寫入前擋下兩類修改：雜訊註解，以及關掉或刪除測試 |
 | `plugins/evidence-ledger` | worker 結束時，把它實際改了哪些檔案、跑了哪些指令交給 lead |
+| `plugins/openai-context` | 用 ChatGPT 登入時，OpenCode 內建規則會把 GPT 的輸入上限壓到 272K 或 500K。這個外掛把每個 OpenAI 模型的上限改回 models.dev 目錄裡的值（目前約 1.05M），只會調高 |
 | `plugins/check-loop` | agent 收尾時自動跑專案的 check，失敗就把輸出送回給 agent。只在有 `.opencode/check-loop.json` 的專案生效，見下方 |
 | `scripts/usage-report.ts` | 用量報告：`bun ~/.config/opencode/scripts/usage-report.ts --days 14` |
 
