@@ -125,8 +125,9 @@ the code share its misunderstandings.
   the `debugging` skill before changing code.
 - After the fix, ask whether this mistake can be made impossible: a type, a
   lint rule, or an API that cannot be misused. Prefer that over a test when
-  it is cheap. When the same kind of mistake shows up a second time, load the
-  `mistakes-to-lint-rules` skill and make it such a check.
+  it is cheap. When the mistake was a wrong way of writing code, load the
+  `mistakes-to-lint-rules` skill: it checks for a second occurrence and makes
+  it such a check.
 - Otherwise, keep the reproduction as one regression test.
 - Before writing, changing, or reviewing any test, load the
   `tests-that-catch-bugs` skill.
