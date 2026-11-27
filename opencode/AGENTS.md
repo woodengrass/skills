@@ -103,10 +103,9 @@ the code share its misunderstandings.
 
 - While working, run only the checks related to what you just changed.
 - If the change affects what the user sees or does, run the real program once
-  and exercise the changed behavior the way the user would. Load the
-  `verify-app` skill for this; it uses the project's existing method or sets
-  up the smallest one. Put the evidence in the report: captured screen text,
-  command output, or log lines.
+  and use the changed behavior the way the user would, looking at what it
+  shows. Load the `manual-qa` skill for this. Put in the report what you saw
+  at each step and where the evidence is.
 - Before reporting, the final version must have one result from the
   project's full existing checks (build, types, lint, tests). If CI or a hook
   already ran them on the final version, cite that result; otherwise run them

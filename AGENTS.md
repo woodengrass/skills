@@ -50,8 +50,6 @@ subagent's scope is its delegating prompt.
   - When two records conflict, the one in the deeper directory wins.
 - If the request is ambiguous or conflicts with a recorded decision, ask before
   starting, with every question in one message.
-- First non-trivial task in a project with no `GOALS.md`: load the `adr` skill
-  and follow its goals step.
 
 ## While Working
 
@@ -110,10 +108,9 @@ the code share its misunderstandings.
 
 - While working, run only the checks related to what you just changed.
 - If the change affects what the user sees or does, run the real program once
-  and exercise the changed behavior the way the user would. Load the
-  `verify-app` skill for this; it uses the project's existing method or sets
-  up the smallest one. Put the evidence in the report: captured screen text,
-  command output, or log lines.
+  and use the changed behavior the way the user would, looking at what it
+  shows. Put in the report what you saw at each step and where the evidence
+  is.
 - Before reporting, the final version must have one result from the
   project's full existing checks (build, types, lint, tests). If CI or a hook
   already ran them on the final version, cite that result; otherwise run them
@@ -129,14 +126,11 @@ the code share its misunderstandings.
 - Fixing a bug: first reproduce it with real behavior and confirm it fails for
   the reason the user saw. Only then fix it. If you cannot reproduce it, you
   have not found the cause; say so instead of fixing blind.
-  When the cause is not yet known, load the `debugging` skill.
 - After the fix, ask whether this mistake can be made impossible: a type, a
   lint rule, or an API that cannot be misused. Prefer that over a test when
-  it is cheap. When the same kind of mistake shows up a second time, load the
-  `mistakes-to-lint-rules` skill and make it such a check.
+  it is cheap. When the same kind of mistake shows up a second time, make it
+  such a check.
 - Otherwise, keep the reproduction as one regression test.
-- Before writing, changing, or reviewing any test, load the
-  `tests-that-catch-bugs` skill.
 - Do not edit or delete an existing test to make it pass. Change a test only
   when the request plainly changes the behavior it checks; otherwise a failing
   test means your change is wrong.
@@ -145,8 +139,8 @@ the code share its misunderstandings.
 
 When direction comes up that will still apply after this task and that a new
 agent reading only the code would likely go against (a permission, a
-constraint, a rejected approach, a reversed decision), load the `adr` skill,
-write the record, and carry on. Do the same when you reach a working approach
+constraint, a rejected approach, a reversed decision), write a decision
+record (`*.adr.md`) and carry on. Do the same when you reach a working approach
 only after others failed for a reason the code will not show, so the next
 agent does not repeat the trial and error. Mention the file in one sentence.
 Never add conditions that were not stated. Task-only instructions are not
@@ -164,10 +158,8 @@ Mention the addition in one sentence.
 
 ## Git
 
-Before your first git command that changes something (a branch, a commit, a
-push), load the `git` skill. In a git repository, work on a branch, commit
-after each step that works, and when the task is done, prepare the pull
-request as the skill says.
+In a git repository, work on a branch, commit after each step that works,
+and when the task is done, prepare a pull request.
 
 ## Done
 

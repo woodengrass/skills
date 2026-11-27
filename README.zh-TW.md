@@ -11,7 +11,7 @@
 - [`github-actions-ci`](./skill/github-actions-ci/SKILL.md)：設定或審查 GitHub Actions CI，讓每個 PR 跑完專案現有的檢查，並驗證各項檢查能攔下對應的錯誤。
 - [`git`](./skill/git/SKILL.md)：分支、頻繁 commit、PR、CI 失敗、查歷史與安全還原，每個部分一個檔案。
 - [`debugging`](./skill/debugging/SKILL.md)：觀察實際執行的程式找出 bug 原因，一次驗證一個假設，並留下假設紀錄。
-- [`verify-app`](./skill/verify-app/SKILL.md)：啟動並操作真實的 app（web、CLI、API、iOS）證明改動有效，並維護一份使用者需求清單。
+- [`manual-qa`](./skill/manual-qa/SKILL.md)：像真人一樣親自一步步操作真實的 app（web 用 Chrome DevTools、CLI 與 TUI、API、iOS），逐一看過每個畫面並回報問題。自動化檢查交給 `tests-that-catch-bugs`。
 - [`opencode/`](./opencode/README.md)：選用。我在 OpenCode V2 上的設定（角色、權限、外掛），有自己的一份 `AGENTS.md`，skills 用上面這些；可以用下面的 prompt 安裝，或直接執行 `opencode/install.sh`。
 
 部分指引要求 agent 用繁體中文書寫：兩份 `AGENTS.md` 裡給使用者的回覆，以及 `adr` skill 裡的決策紀錄。使用前請改成你自己的語言。
