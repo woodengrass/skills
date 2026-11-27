@@ -24,7 +24,12 @@
     { "action": "shell", "resource": "gh pr comment *", "effect": "ask" },
     { "action": "shell", "resource": "gh issue create *", "effect": "ask" },
     { "action": "shell", "resource": "gh issue comment *", "effect": "ask" },
-    { "action": "shell", "resource": "gh release *", "effect": "ask" },
+    // Reading releases (list, view, download) runs without asking; changing one asks.
+    { "action": "shell", "resource": "gh release create *", "effect": "ask" },
+    { "action": "shell", "resource": "gh release edit *", "effect": "ask" },
+    { "action": "shell", "resource": "gh release delete *", "effect": "ask" },
+    { "action": "shell", "resource": "gh release delete-asset *", "effect": "ask" },
+    { "action": "shell", "resource": "gh release upload *", "effect": "ask" },
     // gh repo and gh api run without asking, except deleting a repository, which cannot be undone.
     { "action": "shell", "resource": "gh repo delete *", "effect": "ask" },
     { "action": "shell", "resource": "npm publish *", "effect": "ask" },
