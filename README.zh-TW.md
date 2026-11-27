@@ -14,6 +14,8 @@
 - [`verify-app`](./skill/verify-app/SKILL.md)：啟動並操作真實的 app（web、CLI、API、iOS）證明改動有效，並維護一份使用者需求清單。
 - [`opencode/`](./opencode/README.md)：選用。我在 OpenCode V2 上的設定（角色、權限、外掛），有自己的一份 `AGENTS.md`，skills 用上面這些；可以用下面的 prompt 安裝，或直接執行 `opencode/install.sh`。
 
+部分指引要求 agent 用繁體中文書寫：兩份 `AGENTS.md` 裡給使用者的回覆，以及 `adr` skill 裡的決策紀錄。使用前請改成你自己的語言。
+
 ## 安裝
 
 把下面的 prompt 貼給你正在使用的 coding agent：

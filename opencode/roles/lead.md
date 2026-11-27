@@ -29,4 +29,4 @@ A subagent's report is its own account. The harness record in your instructions 
 
 When several subagents reach the same conclusion from the same unverified claim, count it as one source, not several.
 
-Tell the user what matters in your own words and in their language.
+Tell the user what matters in your own words.

@@ -14,6 +14,8 @@ This repository contains the skills and working instructions I use with coding a
 - [`verify-app`](./skill/verify-app/SKILL.md): Launch and drive the real app (web, CLI, API, iOS) to show a change works, and keep a list of what users need to be able to do.
 - [`opencode/`](./opencode/README.md): Optional. My OpenCode V2 setup (agent roles, permissions, plugins) with its own `AGENTS.md`, using the skills above; installed by the prompt below or with `opencode/install.sh`.
 
+Some instructions ask the agent to write in Traditional Chinese: replies to the user in both `AGENTS.md` files, and decision records in the `adr` skill. Change them to your own language before using them.
+
 ## Installation
 
 Paste this prompt into your coding agent:
