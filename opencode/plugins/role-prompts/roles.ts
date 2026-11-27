@@ -28,3 +28,12 @@ export function readRole(dir: string, agent: string): string | undefined {
 export function insertRole(system: SystemText[], role: string): void {
   system.splice(Math.min(1, system.length), 0, { type: "text", text: role });
 }
+
+// The claude-agent provider runs Claude Code, which ignores the system parts above and builds its prompt from
+// these options instead; an empty claudeCodeAgent is where an agent's own prompt goes.
+export function insertRoleForClaudeCode(options: Record<string, unknown> | undefined, role: string): void {
+  if (options === undefined || typeof options.claudeCodeAgent !== "string") return;
+  const current = options.claudeCodeAgent.trim();
+  if (current.includes(role)) return;
+  options.claudeCodeAgent = current.length > 0 ? `${role}\n\n${current}` : role;
+}

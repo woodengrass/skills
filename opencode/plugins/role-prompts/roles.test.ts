@@ -2,7 +2,7 @@ import { afterAll, describe, expect, test } from "bun:test";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { insertRole, readRole, type SystemText } from "./roles.ts";
+import { insertRole, insertRoleForClaudeCode, readRole, type SystemText } from "./roles.ts";
 
 const dir = mkdtempSync(join(tmpdir(), "roles-"));
 writeFileSync(join(dir, "worker.md"), "\nWorker rules.\n");
@@ -47,5 +47,15 @@ describe("role prompts", () => {
     const system: SystemText[] = [];
     insertRole(system, "Worker rules.");
     expect(system.map((part) => part.text)).toEqual(["Worker rules."]);
+  });
+
+  test("puts the role where Claude Code reads an agent prompt, once, and leaves other providers alone", () => {
+    const options: Record<string, unknown> = { claudeCodeAgent: "", claudeCodeInstructions: "CODE MODE" };
+    insertRoleForClaudeCode(options, "Lead rules.");
+    insertRoleForClaudeCode(options, "Lead rules.");
+    expect(options).toEqual({ claudeCodeAgent: "Lead rules.", claudeCodeInstructions: "CODE MODE" });
+    const other: Record<string, unknown> = { reasoningEffort: "high" };
+    insertRoleForClaudeCode(other, "Lead rules.");
+    expect(other).toEqual({ reasoningEffort: "high" });
   });
 });
