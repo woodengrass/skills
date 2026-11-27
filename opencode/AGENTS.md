@@ -121,7 +121,8 @@ the code share its misunderstandings.
 - Fixing a bug: first reproduce it with real behavior and confirm it fails for
   the reason the user saw. Only then fix it. If you cannot reproduce it, you
   have not found the cause; say so instead of fixing blind.
-  When the cause is not yet known, load the `debugging` skill.
+  Unless you have already seen the cause happen in the running program, load
+  the `debugging` skill before changing code.
 - After the fix, ask whether this mistake can be made impossible: a type, a
   lint rule, or an API that cannot be misused. Prefer that over a test when
   it is cheap. When the same kind of mistake shows up a second time, load the

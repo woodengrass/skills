@@ -1,6 +1,6 @@
 ---
 name: debugging
-description: Use when something behaves wrongly and the cause is not yet known (a bug report, a failing test or build, a crash, wrong output, a regression), before changing code to fix it. Finds the cause from what the program does at run time instead of from reading code, and leaves a hypothesis log the reader can check.
+description: Use before changing code to fix something that behaves wrongly (a bug report, a failing test or build, a crash, wrong output, a regression, a problem found in QA), unless you have already seen the cause happen in the running program. Finds the cause from what the program does at run time instead of from reading code, and leaves a hypothesis log the reader can check.
 ---
 
 # Debugging
@@ -14,12 +14,26 @@ from weak reasoning. This skill is about observing.
 
 - Make the failure happen yourself, on the same surface the user saw it
   (the app, the CLI, the test, the API), and keep the exact output.
+  For something the user sees on screen, use the app as `manual-qa`
+  describes and look at the screen, not only at its text.
 - If it does not reproduce, narrow the conditions (input, data, environment,
   timing) or add logging until it does. If you still cannot see it, say what
   you would need to observe it (access, a log, a step from the user) and stop
   there. A fix for a failure you never saw is a guess.
 - When a cheap test can reproduce it, write that test now and see it fail
   (`tests-that-catch-bugs`). Otherwise keep a script or command that shows it.
+
+## Intermittent failures
+
+- Run it many times (for example 20–50) and record how often it fails.
+  One green run proves nothing.
+- Pin what varies: random seeds, time and time zone, test order,
+  parallelism, network. Change one at a time to see which one moves the
+  failure rate.
+- Compare a failing run with a passing one: logs, timing, order of events.
+- After the fix, run the same number of times and show zero failures.
+  Never fix it by adding a retry or a longer timeout unless waiting really
+  is the correct behavior.
 
 ## 2. Look before you theorize
 
@@ -45,6 +59,8 @@ Ways to observe, in order of preference:
 
 - Print or log at the boundaries between parts: what data goes in, what comes
   out. One run shows which part breaks.
+- For a web page, the browser's own view through Chrome DevTools: console
+  messages, network requests and responses, the DOM and computed styles.
 - A debugger in batch mode, when you need state in the middle of execution or
   inside code you cannot edit. The shell is not interactive, so pass all
   commands up front:
