@@ -2,6 +2,12 @@
   "$schema": "https://opencode.ai/config.json",
   "default_agent": "lead",
   "websearch": { "provider": "exa" },
+  "commands": {
+    "bro": {
+      "description": "Restate the last message in plain words",
+      "template": "Load the `bro` skill and restate your last message as it says."
+    }
+  },
   // Last matching rule wins. Agent rules are appended after these.
   "permissions": [
     { "action": "read", "resource": "*.env", "effect": "deny" },

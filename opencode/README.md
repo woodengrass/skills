@@ -42,7 +42,7 @@ curl -fsSL https://raw.githubusercontent.com/woodengrass/skills/main/opencode/up
 | `AGENTS.md` | OpenCode 用的全域規則 |
 | `agents/` | 9 個角色的模型和權限（不設步數上限）：lead、quick、worker、worker-deep、reviewer、advisor、advisor-alt、explore、librarian |
 | `roles/` | 各角色的說明。由 role-prompts 外掛插在 OpenCode 依模型家族準備的 base prompt 後面，所以 base prompt 會保留 |
-| `opencode.jsonc` | 預設 agent、權限（遠端操作要確認；`.env`、`git reset --hard`、`git add -A` 會被拒絕；修改設定要確認）、MCP（chrome-devtools）、websearch |
+| `opencode.jsonc` | 預設 agent、權限（遠端操作要確認；`.env`、`git reset --hard`、`git add -A` 會被拒絕；修改設定要確認）、MCP（chrome-devtools）、websearch、`/bro` 指令 |
 | `plugins/role-prompts` | 把 `roles/` 的文字插進 system prompt |
 | `plugins/adr-inject` | 讀或改檔案時，把 GOALS.md 和相關的 `*.adr.md` 放進指示。壓縮對話後仍會保留 |
 | `plugins/comment-checker` | 寫入前擋下關掉或刪除測試的修改；雜訊註解照常寫入，並在結果附上請它移除的提醒 |
