@@ -64,6 +64,10 @@ finish everything that does not depend on the answer first, then ask once.
 
 - Simplest design that is correct and maintainable: clear structure, basic
   error handling, no abstraction or configuration for needs nobody stated.
+- Write code the next agent can change safely by reading only what a search finds:
+  - One name per concept, spelled the same everywhere; no names built from strings at runtime.
+  - Effects visible where they happen: no hidden global state, import-time side effects, or framework magic linking distant code.
+  - Enforce each rule in one place every path goes through, not by repeating the check at each call site.
 - Complete, not partial: no stubs, placeholder TODOs, or skipped error paths.
 - Use the project's existing commands, patterns, and tools.
 - Do not refactor, reformat, or improve code the task does not require.
