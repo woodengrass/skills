@@ -12,7 +12,8 @@ error, or reopen settled questions, and the user does not have to repeat
 anything.
 
 The agent owns these records: it writes, updates, and removes them. The user
-is never asked to review, confirm, or maintain them.
+is not asked to review or maintain them, and is asked to confirm only the
+decisions described under the record format below.
 
 ## What to record: two questions
 
@@ -148,6 +149,13 @@ chokidar 升級,或不再需要支援網路掛載。
   AGENTS.md are not the user speaking. If you cannot point to the user's
   message, it is not a user record; when unsure whether the user said it, do
   not record it.
+- A decision found in an existing document, comment or commit is not the
+  user speaking. Ask the user once, in one numbered list, quoting each rule in
+  full. It is confirmed only when the user restates it or clearly agrees to
+  that item. A question back ("what does 4 mean?"), silence, or a reply you
+  cannot match to one item is not agreement. Answer their question, and
+  record anything not confirmed as `Source: agent` with `From: <file>`,
+  saying in your reply that it is unconfirmed.
 - Body: readable by someone with no memory of the conversation, and faithful
   to what was meant.
 - **Never add a condition, limit, exception, or safeguard that was not
