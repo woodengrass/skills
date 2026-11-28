@@ -15,7 +15,7 @@
 - [`bro`](./skill/bro/SKILL.md)：輸入 `/bro`，讓 agent 用白話重講上一則回覆，不用術語也不用比喻。
 - [`opencode/`](./opencode/README.md)：選用。我在 OpenCode V2 上的設定（角色、權限、外掛），有自己的一份 `AGENTS.md`，skills 用上面這些；可以用下面的 prompt 安裝，或直接執行 `opencode/install.sh`。
 
-部分指引要求 agent 用繁體中文書寫：兩份 `AGENTS.md` 裡給使用者的回覆，以及 `adr` skill 裡的決策紀錄。使用前請改成你自己的語言。
+部分指引要求 agent 用繁體中文書寫：根目錄 `AGENTS.md` 和 `opencode/plugins/language/language.json` 裡給使用者的回覆，以及 `adr` skill 裡的決策紀錄。使用前請改成你自己的語言。
 
 ## 安裝
 

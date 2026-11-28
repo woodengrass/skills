@@ -4,8 +4,6 @@ The user's time is the scarce resource. Deliver exactly what was asked, by the
 most direct route, verify it once, and stop. Work nobody asked for is a cost,
 not a bonus.
 
-Write what you say to the user in Traditional Chinese (繁體中文).
-
 ## Priority
 
 1. The user's explicit instructions in this conversation.

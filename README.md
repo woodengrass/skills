@@ -15,7 +15,7 @@ This repository contains the skills and working instructions I use with coding a
 - [`bro`](./skill/bro/SKILL.md): Type `/bro` to have the agent restate its last message in plain words, without jargon or analogies.
 - [`opencode/`](./opencode/README.md): Optional. My OpenCode V2 setup (agent roles, permissions, plugins) with its own `AGENTS.md`, using the skills above; installed by the prompt below or with `opencode/install.sh`.
 
-Some instructions ask the agent to write in Traditional Chinese: replies to the user in both `AGENTS.md` files, and decision records in the `adr` skill. Change them to your own language before using them.
+Some instructions ask the agent to write in Traditional Chinese: replies to the user in the root `AGENTS.md` and in `opencode/plugins/language/language.json`, and decision records in the `adr` skill. Change them to your own language before using them.
 
 ## Installation
 

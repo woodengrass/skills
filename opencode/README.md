@@ -49,6 +49,7 @@ curl -fsSL https://raw.githubusercontent.com/woodengrass/skills/main/opencode/up
 | `plugins/evidence-ledger` | worker 結束時，把它實際改了哪些檔案、跑了哪些指令交給 lead |
 | `plugins/openai-context` | 用 ChatGPT 登入時，OpenCode 內建規則會把 GPT 的輸入上限壓到 272K 或 500K。這個外掛把每個 OpenAI 模型的上限改回 models.dev 目錄裡的值（目前約 1.05M），只會調高 |
 | `plugins/check-loop` | agent 收尾時自動跑專案的 check，失敗就把輸出送回給 agent。只在有 `.opencode/check-loop.json` 的專案生效，見下方 |
+| `plugins/language` | 在頂層 session 的每則使用者訊息後面加一句「用這個語言回覆使用者」，長 session 才不會飄回英文。subagent 不加，它們的報告是給 lead 看的。語言在 `plugins/language/language.json` 改，每次請求都會重讀，不用重啟；值留空就關掉 |
 | `scripts/usage-report.ts` | 用量報告：`bun ~/.config/opencode/scripts/usage-report.ts --days 14` |
 
 只在各台電腦上、不進 repo 的檔案（都在 `~/.config/opencode/`）：
